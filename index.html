@@ -25,21 +25,46 @@
       td {
         padding: 15px;
       }
+      #result {
+        visibility: hidden;
+      }
+      #score {
+        visibility: visible;
+        text-align: center;
+        font-size: 2rem;
+      }
+      #restart {
+        width: 5vw;
+        height: 5vh;
+        margin: 10px;
+        background-color: black;
+        font-family: "Courier New", Courier, monospace;
+        font-size: large;
+        color: wheat;
+        cursor: pointer;
+      }
+      #restart:hover {
+        background-color: grey;
+      }
     </style>
   </head>
   <body>
     <canvas></canvas>
-    <h1>Score</h1>
-    <table class="scoreboard">
-      <tr>
-        <td><h3>Player 1</h3></td>
-        <td><h3>Player 2</h3></td>
-      </tr>
-      <tr>
-        <td id="score1">0</td>
-        <td id="score2">0</td>
-      </tr>
-    </table>
-    <script src="index.js"></script>
+    <h1 id="result"></h1>
+    <div id="score">
+      <h1>Score</h1>
+      <table class="scoreboard">
+        <tr>
+          <td id="player1"><h3>Player 1</h3></td>
+          <td id="player2"><h3>Player 2</h3></td>
+        </tr>
+        <tr>
+          <td id="score1">0</td>
+          <td id="score2">0</td>
+        </tr>
+      </table>
+    </div>
+    <button id="restart">Restart</button>
+    <script src="js/index.js"></script>
   </body>
 </html>
