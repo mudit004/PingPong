@@ -1,3 +1,12 @@
+let player1 = prompt("name of Player 1");
+let player2 = prompt("name of Player2");
+
+console.log(player1);
+console.log(player2);
+
+document.getElementById("player1").innerHTML = player1;
+document.getElementById("player2").innerHTML = player2;
+
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
@@ -82,8 +91,8 @@ class Ball {
   reset() {
     this.position.x = canvas.width / 2;
     this.position.y = canvas.height / 2;
-    this.velocity.x = 2;
-    this.velocity.y = 2;
+    this.velocity.x = 4;
+    this.velocity.y = 4;
   }
 
   update() {
@@ -96,6 +105,20 @@ class Ball {
     )
       this.reflectX();
     if (
+      (BLOCK_WIDTH + this.radius >= this.position.x &&
+        (p1.position.y + p1.dimensions.h ===
+          this.position.y - this.radius * Math.pow(0.5, 0.5) ||
+          p1.position.y ===
+            this.position.y + this.radius * Math.pow(0.5, 0.5))) ||
+      (canvas.width - BLOCK_WIDTH - this.radius <= this.position.x &&
+        (p2.position.y === this.position.y + this.radius * Math.pow(0.5, 0.5) ||
+          p2.position.y + p2.dimensions.h ===
+            this.position.y - this.radius * Math.pow(0.5, 0.5)))
+    ) {
+      this.position.x -= this.velocity.x;
+      this.reflectX();
+      this.reflectY();
+    } else if (
       (BLOCK_WIDTH + this.radius >= this.position.x &&
         this.position.y >= p1.position.y &&
         this.position.y <= p1.position.y + p1.dimensions.h) ||
@@ -127,15 +150,32 @@ class Ball {
         this.reset();
       }
       if (scores.p1 >= 5) {
-        alert("p1 wins!");
+        // scores.p1 += 1;
+        // document.getElementById("score2").innerHTML = scores.p2;
+        // alert("p1 wins!");
         this.reset();
-        document.getElementById("score1").innerHTML = 0;
-        document.getElementById("score2").innerHTML = 0;
-        restart();
+        // restart();
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+
+        // this.reset();
+        // document.getElementById("score1").innerHTML = 0;
+        // document.getElementById("score2").innerHTML = 0;
+        // restart();
+
+        document.getElementById("score").style.visibility = "hidden";
+        document.getElementById("result").style.visibility = "visible";
+        document.getElementById("result").innerHTML = "Player 1 Wins";
       } else if (scores.p2 >= 5) {
-        alert("p2 wins!");
+        // alert("p2 wins!");
         this.reset();
-        restart();
+        this.velocity.x = 0;
+        this.velocity.y = 0;
+        document.getElementById("score").style.visibility = "hidden";
+        document.getElementById("result").style.visibility = "visible";
+        document.getElementById("result").innerHTML = "Player 2 Wins";
+
+        // restart();
       }
     }
   }
@@ -181,7 +221,7 @@ let p2 = new Block({
 
 let ball = new Ball({
   position: { x: canvas.width / 2, y: canvas.height / 2 },
-  velocity: { x: 2, y: 2 },
+  velocity: { x: 4, y: 4 },
   radius: 20,
 });
 
@@ -229,4 +269,20 @@ window.addEventListener("keyup", (event) => {
       keys.s.pressed = false;
       break;
   }
+});
+document.getElementById("restart").addEventListener("click", function () {
+  restart();
+  document.getElementById("score1").innerHTML = scores.p1;
+  document.getElementById("score2").innerHTML = scores.p2;
+  document.getElementById("score").style.visibility = "visible";
+  document.getElementById("result").style.visibility = "hidden";
+  ball.reset();
+  p1.position = {
+    x: 0,
+    y: canvas.height / 2 - BLOCK_HEIGHT / 2,
+  };
+  p2.position = {
+    x: canvas.width - BLOCK_WIDTH,
+    y: canvas.height / 2 - BLOCK_HEIGHT / 2,
+  };
 });
